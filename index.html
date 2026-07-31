@@ -1,82 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Station Readout — Weather</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <main class="station">
-    <header class="station__header">
-      <p class="eyebrow">Station Readout</p>
-      <p class="timestamp" id="timestamp">—</p>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Station Readout — Weather</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="station">
+      <header class="station__header">
+        <p class="eyebrow">Station Readout</p>
+        <p class="timestamp" id="timestamp">—</p>
+      </header>
 
-    <form class="search" id="search-form">
-      <label class="search__label" for="city-input">Location</label>
-      <div class="search__row">
-        <input
-          type="text"
-          id="city-input"
-          name="city"
-          placeholder="Enter a city…"
-          autocomplete="off"
-          required
-        >
-        <button type="submit" class="search__button">Look up</button>
-      </div>
-    </form>
-
-    <section class="reading" id="reading" aria-live="polite">
-      <div class="reading__place">
-        <h1 class="reading__city" id="city-name">—</h1>
-        <p class="reading__region" id="region-name"></p>
-      </div>
-
-      <div class="reading__main">
-        <span class="reading__temp" id="temperature">--°</span>
-        <span class="reading__condition" id="condition">Awaiting reading</span>
-      </div>
-
-      <div class="scale" role="presentation">
-        <span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span>
-        <span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span>
-        <span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span>
-        <span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span><span class="scale__tick"></span>
-        <span class="scale__tick"></span>
-      </div>
-
-      <dl class="stats">
-        <div class="stats__item">
-          <dt>Feels like</dt>
-          <dd id="feels-like">—</dd>
+      <form class="search" id="search-form">
+        <label class="search__label" for="city-input">Location</label>
+        <div class="search__row">
+          <input
+            type="text"
+            id="city-input"
+            name="city"
+            placeholder="Enter a city…"
+            autocomplete="off"
+            required
+          />
+          <button type="submit" class="search__button">Look up</button>
         </div>
-        <div class="stats__item">
-          <dt>Humidity</dt>
-          <dd id="humidity">—</dd>
-        </div>
-        <div class="stats__item">
-          <dt>Wind</dt>
-          <dd id="wind">—</dd>
-        </div>
-        <div class="stats__item">
-          <dt>Pressure</dt>
-          <dd id="pressure">—</dd>
-        </div>
-      </dl>
-    </section>
+      </form>
 
-    <p class="status" id="status" role="status"></p>
+      <section class="reading" id="reading" aria-live="polite">
+        <div class="reading__place">
+          <h1 class="reading__city" id="city-name">—</h1>
+          <p class="reading__region" id="region-name"></p>
+        </div>
 
-    <footer class="station__footer">
-      <p>Data via <span id="source">—</span></p>
-    </footer>
-  </main>
+        <div class="reading__main">
+          <span class="reading__temp" id="temperature">--°</span>
+          <span class="reading__condition" id="condition"
+            >Awaiting reading</span
+          >
+        </div>
 
-  <script src="script.js"></script>
-</body>
+        <div class="scale" role="presentation">
+          <span class="scale__tick"></span><span class="scale__tick"></span
+          ><span class="scale__tick"></span><span class="scale__tick"></span
+          ><span class="scale__tick"></span> <span class="scale__tick"></span
+          ><span class="scale__tick"></span><span class="scale__tick"></span
+          ><span class="scale__tick"></span><span class="scale__tick"></span>
+          <span class="scale__tick"></span><span class="scale__tick"></span
+          ><span class="scale__tick"></span><span class="scale__tick"></span
+          ><span class="scale__tick"></span> <span class="scale__tick"></span
+          ><span class="scale__tick"></span><span class="scale__tick"></span
+          ><span class="scale__tick"></span><span class="scale__tick"></span>
+          <span class="scale__tick"></span>
+        </div>
+
+        <dl class="stats">
+          <div class="stats__item">
+            <dt>Feels like</dt>
+            <dd id="feels-like">—</dd>
+          </div>
+          <div class="stats__item">
+            <dt>Humidity</dt>
+            <dd id="humidity">—</dd>
+          </div>
+          <div class="stats__item">
+            <dt>Wind</dt>
+            <dd id="wind">—</dd>
+          </div>
+          <div class="stats__item">
+            <dt>Pressure</dt>
+            <dd id="pressure">—</dd>
+          </div>
+        </dl>
+      </section>
+
+      <p class="status" id="status" role="status"></p>
+
+      <footer class="station__footer">
+        <p>Data via <span id="source">—</span></p>
+      </footer>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
