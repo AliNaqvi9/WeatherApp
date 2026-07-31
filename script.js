@@ -1,14 +1,10 @@
 // Weather App — logic layer
 `strict mode`;
-// The HTML/CSS are done. This file is deliberately left mostly empty —
-// async/await + fetch + JSON parsing is the actual point of this project,
-// so it's worth writing yourself rather than having it handed to you.
-// DOM references are wired up below so you can focus purely on the logic.
 
-// let form = document.getElementById("search-form");
-// console.log(form);
-form = document.querySelector("#search-form");
-console.log(form);
+//deliberatly left await with the .then => purely for learning purposes
+
+const form = document.querySelector("#search-form");
+
 const cityInput = document.getElementById("city-input");
 const statusEl = document.getElementById("status");
 
@@ -24,7 +20,6 @@ const timestampEl = document.getElementById("timestamp");
 const sourceEl = document.getElementById("source");
 
 const getPosition = function () {
-  let pos;
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (position) => resolve(position),
@@ -36,7 +31,6 @@ const getPosition = function () {
       },
     );
   });
-  return pos;
 };
 
 async function getMyCity() {
@@ -107,7 +101,7 @@ async function fetchData(city) {
       .then((data) => {
         console.log(data[0]);
         //  let latitude; let longitude ;
-        ({ lat, lon } = data[0]);
+        const { lat, lon } = data[0];
         console.log(lat);
         console.log(lon);
       })
