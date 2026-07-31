@@ -139,7 +139,7 @@ async function fetchData(city) {
 
     const {
       main: { temp, feels_like, humidity, pressure },
-      weather: [{ main: condition }],
+      weather: [{ description: condition }],
       wind: { speed: windSpeed },
     } = data;
 
