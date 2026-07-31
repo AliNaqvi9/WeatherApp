@@ -1,5 +1,5 @@
 // Weather App — logic layer
-//
+`strict mode`;
 // The HTML/CSS are done. This file is deliberately left mostly empty —
 // async/await + fetch + JSON parsing is the actual point of this project,
 // so it's worth writing yourself rather than having it handed to you.
@@ -23,22 +23,12 @@ const pressureEl = document.getElementById("pressure");
 const timestampEl = document.getElementById("timestamp");
 const sourceEl = document.getElementById("source");
 
-let lng;
-let lat;
-
 const getPosition = function () {
+  let pos;
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        lat = position.coords.latitude;
-        lng = position.coords.longitude;
-        console.log(`Latitude: ${lat}, Longitude: ${lng}`);
-        resolve(position);
-      },
-      (error) => {
-        console.error(`Error code ${error.code}: ${error.message}`);
-        reject(error);
-      },
+      (position) => resolve(position),
+      (error) => reject(error),
       {
         enableHighAccuracy: true,
         timeout: 5000,
@@ -46,31 +36,57 @@ const getPosition = function () {
       },
     );
   });
+  return pos;
 };
-// (async function () {
-//   try {
-//     console.log("start");
-//     await getPosition();
-//     console.log("end");
-//   } catch (err) {
-//     console.error(`${err} `);
-//   }
-// })();
 
+async function getMyCity() {
+  const position = await getPosition();
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+
+  await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`,
+  )
+    .then(async (response) => {
+      if (!response.ok) throw new Error("Problem getttting weather country");
+
+      return await response.json();
+    })
+    .then((result) => {
+      console.log(result);
+      const myCity = result.name;
+      fetchData(myCity);
+    });
+}
+const timeout = function (sec) {
+  return new Promise((_, reject) => {
+    setTimeout(function () {
+      reject(new Error("Request took too long!"));
+    }, sec * 1000);
+  });
+};
+
+//extra feature
+//Defualt it by using our Current postion
+// set response time to 2 second
+Promise.race([getMyCity(), timeout(2)]);
+
+//for user Input
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const city = cityInput.value.trim();
+  fetchData(city);
+});
+
+async function fetchData(city) {
   if (!city) {
     return;
-
-    // https://api.openweathermap.org/data/4.0/onecall/current?lat={lat}&lon={lon}&appid={API key}
-    //we can use the api to get the city here
   }
 
   // TODO 1 — Loading state
   statusEl.textContent = "Reading…";
 
-  // TODO 2 — Fetch weather for `city`
+  // TODO 1 — Fetch weather for `city`
   //   Pick a provider:
   //     - Open-Meteo (open-meteo.com) — free, no API key, good first pick
   //     - OpenWeatherMap / WeatherAPI — need a free API key
@@ -99,38 +115,47 @@ form.addEventListener("submit", async (event) => {
         throw new Error("Problem getting location coords data");
       });
 
+    let data;
     await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`,
     )
       .then(async (response) => {
-        if (!response.ok) throw new Error("Problem getting country");
+        if (!response.ok) throw new Error("Problem getttting weather country");
 
         return await response.json();
       })
-      .then((data) => {
-        console.log(data);
+      .then((result) => {
+        console.log(result);
+        data = result;
       })
       .catch((err) => {
         throw new Error("Problem getting location Weather data");
       });
+
+    // TODO 2 — On success, populate the DOM:
+    statusEl.textContent = "Reading Completed!";
+    cityNameEl.textContent = city.toUpperCase()[0] + city.slice(1);
+    //   regionNameEl.textContent = ...
+
+    const {
+      main: { temp, feels_like, humidity, pressure },
+      weather: [{ main: condition }],
+      wind: { speed: windSpeed },
+    } = data;
+
+    temperatureEl.textContent = `${Math.round(temp)}°C`;
+    conditionEl.textContent = condition;
+    feelsLikeEl.textContent = `${Math.round(feels_like)}°C`;
+    humidityEl.textContent = `${humidity}%`;
+    windEl.textContent = `${windSpeed} m/s`;
+    pressureEl.textContent = `${pressure} hPa`;
+    timestampEl.textContent = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    sourceEl.textContent = "Openweather";
   } catch (err) {
+    statusEl.textContent = "Could not find that location. Try again.";
     console.error(`${err} 💥`);
   }
-
-  // TODO 3 — On success, populate the DOM:
-  //   cityNameEl.textContent   = ...
-  //   regionNameEl.textContent = ...
-  //   temperatureEl.textContent = `${Math.round(temp)}°`
-  //   conditionEl.textContent  = ...
-  //   feelsLikeEl.textContent  = ...
-  //   humidityEl.textContent   = ...
-  //   windEl.textContent       = ...
-  //   pressureEl.textContent   = ...
-  //   timestampEl.textContent  = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  //   sourceEl.textContent     = 'Open-Meteo'; // or whichever API you used
-  //   statusEl.textContent     = '';
-
-  // TODO 4 — On failure (city not found, network error, etc.):
-  //   statusEl.textContent = 'Could not find that location. Try again.';
-  //   Leave the previous reading in place rather than blanking it.
-});
+}
